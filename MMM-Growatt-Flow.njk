@@ -16,5 +16,12 @@
                 {{electricityPrice}} kr
             {% endif %}
         </p>
+        <p>Result:
+            {% if hourlyProfitOrCost == null %}
+                Loading...
+            {% else %}
+                {{hourlyProfitOrCost}} kr / h
+            {% endif %}
+        </p>
     {% endif %}
 </div>

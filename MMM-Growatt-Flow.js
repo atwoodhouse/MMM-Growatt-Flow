@@ -19,7 +19,8 @@ Module.register("MMM-Growatt-Flow", {
     getTemplateData: function () {
         return {
             growatt: this.growatt,
-            electricityPrice: this.electricityPrice
+            electricityPrice: this.electricityPrice,
+            hourlyProfitOrCost: this.hourlyProfitOrCost,
         };
     },
 
@@ -31,6 +32,13 @@ Module.register("MMM-Growatt-Flow", {
     getElectricityPrice: function () {
         Log.info("time to fetch elecricity price");
         this.sendSocketNotification("GET_ELECTRICITY_PRICE", this.config);
+    },
+
+    getHourlyProfitOrCost: function () {
+        if (this.electricityPrice && this.growatt) {
+            this.hourlyProfitOrCost =
+                Math.round(this.electricityPrice * ((this.growatt.grid * -1) / 1000 || 0));
+        }
     },
 
     scheduleUpdate: function () {
@@ -49,10 +57,16 @@ Module.register("MMM-Growatt-Flow", {
         if (notification === "GROWATT_DATA") {
             console.log("new data from Growatt");
             this.growatt = payload;
+
+            this.getHourlyProfitOrCost();
+
             this.updateDom();
         } else if (notification === "ELECTRICITY_PRICE") {
             console.log("new electricity price", payload);
             this.electricityPrice = payload.electricityPrice;
+
+            this.getHourlyProfitOrCost();
+
             this.updateDom();
         }
     },
