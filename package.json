@@ -1,0 +1,16 @@
+{
+    "name": "mmm-growatt-flow",
+    "version": "1.0.0",
+    "description": "Visualization of solar panel production, energy consumption and grid power usage or feedback for Growatt systems, as a Magic Mirror module.",
+    "main": "MMM-Growatt-Flow.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "growatt": "^0.5.4"
+    },
+    "devDependencies": {
+        "prettier": "^2.8.8"
+    }
+}

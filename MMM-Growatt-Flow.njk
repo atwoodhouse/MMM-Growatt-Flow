@@ -1,0 +1,12 @@
+<!--
+    Use ` | safe` to allow html tags within the text string.
+    https://mozilla.github.io/nunjucks/templating.html#autoescaping
+-->
+<div>
+    {% if growatt == null %}
+        <p>Connecting to Growatt...</p>
+    {% else %}
+        <p>Production: {{growatt.production}}</p>
+        <p>Consumption: {{growatt.consumption}}</p>
+    {% endif %}
+</div>
