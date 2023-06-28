@@ -8,6 +8,8 @@
 Module.register("MMM-Growatt-Flow", {
     defaults: {
         growatt: null,
+        electricityPrice: null,
+        area: "SE3",
     },
 
     getTemplate: function () {
@@ -15,7 +17,10 @@ Module.register("MMM-Growatt-Flow", {
     },
 
     getTemplateData: function () {
-        return { growatt: this.growatt };
+        return {
+            growatt: this.growatt,
+            electricityPrice: this.electricityPrice
+        };
     },
 
     getGrowattData: function () {
@@ -23,14 +28,31 @@ Module.register("MMM-Growatt-Flow", {
         this.sendSocketNotification("GET_GROWATT_DATA", this.config);
     },
 
+    getElectricityPrice: function () {
+        Log.info("time to fetch elecricity price");
+        this.sendSocketNotification("GET_ELECTRICITY_PRICE", this.config);
+    },
+
     scheduleUpdate: function () {
-        this.interval = setInterval(() => this.getGrowattData(), 60000); // update once per minute
+        this.interval = setInterval(() => {
+            // fetch Growatt data every minute
+            this.getGrowattData();
+
+            // fetch electricity prices every 15 minutes
+            if (new Date().getMinutes() % 15 === 0) {
+                this.getElectricityPrice();
+            }
+        }, 60000);
     },
 
     socketNotificationReceived: function (notification, payload) {
         if (notification === "GROWATT_DATA") {
             console.log("new data from Growatt");
             this.growatt = payload;
+            this.updateDom();
+        } else if (notification === "ELECTRICITY_PRICE") {
+            console.log("new electricity price", payload);
+            this.electricityPrice = payload.electricityPrice;
             this.updateDom();
         }
     },
@@ -39,6 +61,7 @@ Module.register("MMM-Growatt-Flow", {
         Log.info(`Starting module: ${this.name}`);
 
         this.getGrowattData();
+        this.getElectricityPrice();
         this.scheduleUpdate();
     },
 

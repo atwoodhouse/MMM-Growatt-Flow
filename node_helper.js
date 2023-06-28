@@ -1,5 +1,6 @@
 const NodeHelper = require("node_helper");
-const api = require("growatt");
+const Growatt = require("growatt");
+const fetch = require("node-fetch");
 
 const options = {
     plantData: true,
@@ -21,17 +22,19 @@ module.exports = NodeHelper.create({
 
     convertGrowattData: function (data, { plantId, deviceSerial }) {
         const production = Math.round(data[plantId].devices[deviceSerial].deviceData.pac);
-        const consumption = Math.round(data[plantId].devices[deviceSerial].historyLast.pacToLocalLoad);
+        const consumption = Math.round(
+            data[plantId].devices[deviceSerial].historyLast.pacToLocalLoad
+        );
 
         return {
             production,
             consumption,
-            grid: consumption - production // negative = feeding back to grid
+            grid: consumption - production, // negative = feeding back to grid
         };
     },
 
     getGrowattData: async function (payload) {
-        const growatt = new api({});
+        const growatt = new Growatt({});
         const login = await growatt.login(payload.username, payload.password).catch((e) => {
             console.log(e);
         });
@@ -52,9 +55,22 @@ module.exports = NodeHelper.create({
         this.sendSocketNotification("GROWATT_DATA", growattData);
     },
 
+    getElectricityPrice: async function (payload) {
+        const year = new Date().toISOString().slice(0, 4);
+        const monthAndDay = new Date().toISOString().slice(5, 10);
+
+        const res = await fetch(`https://www.elprisetjustnu.se/api/v1/prices/${year}/${monthAndDay}_${payload.area}.json`);
+        const data = await res.json();
+        const electricityPrice = data[new Date().getHours()].SEK_per_kWh;
+        console.log({ electricityPrice });
+        this.sendSocketNotification("ELECTRICITY_PRICE", { electricityPrice });
+    },
+
     socketNotificationReceived: function (notification, payload) {
         if (notification === "GET_GROWATT_DATA") {
             this.getGrowattData(payload);
+        } else if (notification === "GET_ELECTRICITY_PRICE") {
+            this.getElectricityPrice(payload);
         }
     },
 });

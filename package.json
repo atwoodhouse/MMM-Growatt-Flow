@@ -8,7 +8,8 @@
     },
     "license": "MIT",
     "dependencies": {
-        "growatt": "^0.5.4"
+        "growatt": "^0.5.4",
+        "node-fetch": "^2.6.11"
     },
     "devDependencies": {
         "prettier": "^2.8.8"

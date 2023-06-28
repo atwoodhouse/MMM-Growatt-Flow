@@ -9,5 +9,12 @@
         <p>Production: {{growatt.production}}W</p>
         <p>Consumption: {{growatt.consumption}}W</p>
         <p>Grid: {{growatt.grid}}W</p>
+        <p>Electricity price:
+            {% if electricityPrice == null %}
+                Loading...
+            {% else %}
+                {{electricityPrice}} kr
+            {% endif %}
+        </p>
     {% endif %}
 </div>
