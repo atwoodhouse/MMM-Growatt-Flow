@@ -20,9 +20,13 @@ module.exports = NodeHelper.create({
     },
 
     convertGrowattData: function (data, { plantId, deviceSerial }) {
+        const production = Math.round(data[plantId].devices[deviceSerial].deviceData.pac);
+        const consumption = Math.round(data[plantId].devices[deviceSerial].historyLast.pacToLocalLoad);
+
         return {
-            production: data[plantId].devices[deviceSerial].deviceData.pac,
-            consumption: data[plantId].devices[deviceSerial].historyLast.pacToLocalLoad,
+            production,
+            consumption,
+            grid: consumption - production // negative = feeding back to grid
         };
     },
 

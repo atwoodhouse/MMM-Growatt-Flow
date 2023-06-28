@@ -6,7 +6,8 @@
     {% if growatt == null %}
         <p>Connecting to Growatt...</p>
     {% else %}
-        <p>Production: {{growatt.production}}</p>
-        <p>Consumption: {{growatt.consumption}}</p>
+        <p>Production: {{growatt.production}}W</p>
+        <p>Consumption: {{growatt.consumption}}W</p>
+        <p>Grid: {{growatt.grid}}W</p>
     {% endif %}
 </div>
