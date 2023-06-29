@@ -12,6 +12,10 @@ Module.register("MMM-Growatt-Flow", {
         area: "SE3",
     },
 
+    getStyles: function() {
+        return ["MMM-Growatt-Flow.css"]
+    },
+
     getTemplate: function () {
         return "MMM-Growatt-Flow.njk";
     },
@@ -37,7 +41,7 @@ Module.register("MMM-Growatt-Flow", {
     getHourlyProfitOrCost: function () {
         if (this.electricityPrice && this.growatt) {
             this.hourlyProfitOrCost =
-                Math.round(this.electricityPrice * ((this.growatt.grid * -1) / 1000 || 0));
+                (this.electricityPrice * ((this.growatt.grid * -1) / 1000 || 0)).toFixed(2);
         }
     },
 

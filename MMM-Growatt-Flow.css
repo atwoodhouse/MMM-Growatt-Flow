@@ -1,0 +1,93 @@
+.growatt-flow {
+    position: relative;
+    width: 40%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+}
+
+.icon {
+    width: 100%;
+}
+.icon.solar {
+    grid-area: 1 / 4;
+}
+.icon.grid {
+    grid-area: 4 / 1;
+}
+.icon.base {
+    grid-area: 4 / 4;
+}
+.icon.house {
+    grid-area: 4 / 7;
+}
+
+.line.solar {
+    grid-area: 2 / 4 / span 2 / span 1;
+}
+.line.grid {
+    grid-area: 4 / 2 / span 1 / span 2;
+}
+.line.house {
+    grid-area: 4 / 5 / span 1 / span 2;
+}
+.line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pipeline {
+    height: 4px;
+    background-color: rgba(5, 114, 206, 0.2);
+    width: 100%;
+    overflow: hidden;
+}
+
+.pipeline.north,
+.pipeline.south {
+    height: 100%;
+    background-color: rgba(5, 114, 206, 0.2);
+    width: 4px;
+    overflow: hidden;
+}
+
+.flow {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(5, 114, 206);
+    animation: eastAnimation 1s infinite linear;
+    transform-origin: 0% 50%;
+}
+.west .flow {
+    animation-direction: reverse;    
+}
+.south .flow {
+    animation: southAnimation 1s infinite linear;
+    transform-origin: 50% 0%;
+}
+
+@keyframes eastAnimation {
+    0% {
+        transform:  translateX(0) scaleX(0);
+    }
+    40% {
+        transform:  translateX(0) scaleX(0.4);
+    }
+    100% {
+        transform:  translateX(100%) scaleX(0.5);
+    }
+}
+
+@keyframes southAnimation {
+    0% {
+        transform:  translateY(0) scaleY(0);
+    }
+    40% {
+        transform:  translateY(0) scaleY(0.4);
+    }
+    100% {
+        transform:  translateY(100%) scaleY(0.5);
+    }
+}

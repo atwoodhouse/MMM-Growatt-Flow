@@ -20,16 +20,32 @@ module.exports = NodeHelper.create({
         console.log("Starting node helper for " + this.name);
     },
 
+    calcSpeed: function(watt) {
+        const MAX_WATT = 10000;
+        // 0.25 - 4.25s (peak at 10 000 W)
+        const exponentialWatt = Math.pow(Math.min(Math.abs(watt), MAX_WATT), 2);
+        const seconds = 4.25 - Math.min(exponentialWatt / 25000000, 4);
+        return `${seconds}s`;
+    },
+
     convertGrowattData: function (data, { plantId, deviceSerial }) {
         const production = Math.round(data[plantId].devices[deviceSerial].deviceData.pac);
         const consumption = Math.round(
             data[plantId].devices[deviceSerial].historyLast.pacToLocalLoad
         );
+        const grid = consumption - production;
+
+        const speed = {
+            production: this.calcSpeed(production),
+            consumption: this.calcSpeed(consumption),
+            grid: this.calcSpeed(grid),
+        };
 
         return {
             production,
             consumption,
-            grid: consumption - production, // negative = feeding back to grid
+            grid, // negative = feeding back to grid
+            speed,
         };
     },
 

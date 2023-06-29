@@ -23,5 +23,14 @@
                 {{hourlyProfitOrCost}} kr / h
             {% endif %}
         </p>
+        <div class="growatt-flow">
+            <img class="icon solar" src="/MMM-Growatt-Flow/solar.png" />
+            <div class="line solar"><div class="pipeline south"><div class="flow" style="animation-duration: {{growatt.speed.production}}"></div></div></div>
+            <img class="icon grid" src="/MMM-Growatt-Flow/grid.png" />
+            <div class="line grid"><div class="pipeline {{"east" if growatt.grid > 0 else "west"}}"><div class="flow" style="animation-duration: {{growatt.speed.grid}}"></div></div></div>
+            <img class="icon base" src="/MMM-Growatt-Flow/base.png" />
+            <div class="line house"><div class="pipeline east"><div class="flow" style="animation-duration: {{growatt.speed.consumption}}"></div></div></div>
+            <img class="icon house" src="/MMM-Growatt-Flow/house.png" />
+        </div>
     {% endif %}
 </div>
