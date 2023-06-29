@@ -6,21 +6,23 @@
     {% if growatt == null %}
         <p>Connecting to Growatt...</p>
     {% else %}
-        <p>Production: {{growatt.production}}W</p>
-        <p>Consumption: {{growatt.consumption}}W</p>
-        <p>Grid: {{growatt.grid}}W</p>
-        <p>Electricity price:
-            {% if electricityPrice == null %}
-                Loading...
-            {% else %}
-                {{electricityPrice}} kr
-            {% endif %}
-        </p>
-        <p>Result:
+        <div class="stats">
+            <p>Production: {{growatt.production}}W</p>
+            <p>Consumption: {{growatt.consumption}}W</p>
+            <p>Grid: {{growatt.grid}}W</p>
+            <p>Electricity price:
+                {% if electricityPrice == null %}
+                    Loading...
+                {% else %}
+                    {{electricityPrice}} kr
+                {% endif %}
+            </p>
+        </div>
+        <p class="profit {{"negative" if hourlyProfitOrCost < 0}}">
             {% if hourlyProfitOrCost == null %}
                 Loading...
             {% else %}
-                {{hourlyProfitOrCost}} kr / h
+                {{"+" if hourlyProfitOrCost > 0}}{{hourlyProfitOrCost}} kr / h
             {% endif %}
         </p>
         <div class="growatt-flow">

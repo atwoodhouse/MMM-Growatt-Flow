@@ -68,6 +68,21 @@
     transform-origin: 50% 0%;
 }
 
+.profit {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #C0EDA6;
+}
+.profit.negative {
+    color: #FF8080;
+}
+
+.stats p {
+    font-size: 0.5rem;
+    margin: 0;
+    color: #555;
+}
+
 @keyframes eastAnimation {
     0% {
         transform:  translateX(0) scaleX(0);
