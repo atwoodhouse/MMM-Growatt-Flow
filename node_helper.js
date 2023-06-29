@@ -20,6 +20,15 @@ module.exports = NodeHelper.create({
         console.log("Starting node helper for " + this.name);
     },
 
+    stop: async function() {
+        if(this.growatt) {
+            const logout = await this.growatt.logout().catch((e) => {
+                console.log(e);
+            });
+            console.log("logout:", logout);
+        }
+    },
+
     calcSpeed: function(watt) {
         const MAX_WATT = 10000;
         // 0.25 - 4.25s (peak at 10 000 W)
@@ -49,21 +58,36 @@ module.exports = NodeHelper.create({
         };
     },
 
+    getConnection: async function (payload) {
+        if(this.growatt) {
+            console.log("Found existing connection, reusing");
+            return this.growatt;
+        }
+
+        console.log("Trying to connect to Growatt.")
+        try {
+            const growatt = new Growatt({});
+            const login = await growatt.login(payload.username, payload.password)
+            this.growatt = growatt;
+            console.log("login:", login);
+        } catch(e) {
+            console.log("Error", e);
+        }
+
+        return this.growatt;
+    },
+
     getGrowattData: async function (payload) {
-        const growatt = new Growatt({});
-        const login = await growatt.login(payload.username, payload.password).catch((e) => {
-            console.log(e);
-        });
-        console.log("login:", login);
+        const growatt = await this.getConnection(payload);
+
+        if(!growatt) {
+            console.log("No connection, will not fetch.")
+            return null;
+        }
 
         const data = await growatt.getAllPlantData(options).catch((e) => {
             console.log(e);
         });
-
-        const logout = await growatt.logout().catch((e) => {
-            console.log(e);
-        });
-        console.log("logout:", logout);
 
         const growattData = this.convertGrowattData(data, payload);
         console.log({ growattData });
