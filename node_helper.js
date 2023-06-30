@@ -59,7 +59,7 @@ module.exports = NodeHelper.create({
     },
 
     getConnection: async function (payload) {
-        if(this.growatt) {
+        if(this.growatt && this.growatt.isConnected()) {
             console.log("Found existing connection, reusing");
             return this.growatt;
         }
@@ -90,7 +90,7 @@ module.exports = NodeHelper.create({
         });
 
         const growattData = this.convertGrowattData(data, payload);
-        console.log({ growattData });
+        //console.log({ growattData });
 
         this.sendSocketNotification("GROWATT_DATA", growattData);
     },
@@ -102,7 +102,7 @@ module.exports = NodeHelper.create({
         const res = await fetch(`https://www.elprisetjustnu.se/api/v1/prices/${year}/${monthAndDay}_${payload.area}.json`);
         const data = await res.json();
         const electricityPrice = data[new Date().getHours()].SEK_per_kWh;
-        console.log({ electricityPrice });
+        //console.log({ electricityPrice });
         this.sendSocketNotification("ELECTRICITY_PRICE", { electricityPrice });
     },
 

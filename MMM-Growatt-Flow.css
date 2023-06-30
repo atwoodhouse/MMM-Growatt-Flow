@@ -72,15 +72,16 @@
     font-size: 3rem;
     font-weight: 700;
     color: #C0EDA6;
+    margin: 0.5rem 0 0.25rem;
 }
 .profit.negative {
     color: #FF8080;
 }
 
 .stats p {
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     margin: 0;
-    color: #555;
+    color: #ccc;
 }
 
 @keyframes eastAnimation {

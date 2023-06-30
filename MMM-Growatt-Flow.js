@@ -46,15 +46,12 @@ Module.register("MMM-Growatt-Flow", {
     },
 
     scheduleUpdate: function () {
+        const UPDATE_INTERVAL_IN_MINUTES = 5;
         this.interval = setInterval(() => {
             // fetch Growatt data every minute
             this.getGrowattData();
-
-            // fetch electricity prices every 15 minutes
-            if (new Date().getMinutes() % 15 === 0) {
-                this.getElectricityPrice();
-            }
-        }, 60000);
+            this.getElectricityPrice();
+        }, UPDATE_INTERVAL_IN_MINUTES * 60000);
     },
 
     socketNotificationReceived: function (notification, payload) {
